@@ -28,12 +28,23 @@ _SEP_LINE = ANSI_YELLOW + ('-' * 80) + ANSI_RESET
 _WRK_SETUP_CMND = r"""
 git clone https://github.com/wg/wrk .
 
+make -j16
+
+mv ./wrk ../
+cd ..
+rm -rf tmp_wrk
+
+mkdir -p tmp_wrk
+cd tmp_wrk
+mv ../wrk ./
 
 """
 
 # ======================================================================================================================
 # ======================================================================================================================
 if '__main__' == __name__:
+
+    start_time = time.time()
 
     print(f"**** Running {__file__}")
 
@@ -43,10 +54,10 @@ if '__main__' == __name__:
 
     wrk_tmp_path = Path(repo_root / 'tmp_wrk').resolve()
 
-    # rm the tmp dir if it exists and make a new one.
+    # rm the tmp dirs if they exists and make new ones.
     shutil.rmtree(wrk_tmp_path, ignore_errors=True)
 
-    # make a new tmp dir
+    # make new tmp dirs
     wrk_tmp_path.mkdir(parents=True, exist_ok=True)
 
     os.chdir(wrk_tmp_path)
@@ -54,4 +65,4 @@ if '__main__' == __name__:
     exit_code = sp.call(_WRK_SETUP_CMND, shell=True)
 
     print(_SEP_LINE)
-    print(f'exit_code: {exit_code}')
+    print(f'exit_code: {exit_code}, time elapsed: {time.time() - start_time}')
