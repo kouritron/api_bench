@@ -30,13 +30,13 @@ git clone https://github.com/wg/wrk .
 
 make -j16
 
-mv ./wrk ../
+mv ./wrk ../wrk_executable
 cd ..
 rm -rf tmp_wrk
 
 mkdir -p tmp_wrk
 cd tmp_wrk
-mv ../wrk ./
+mv ../wrk_executable ./wrk
 
 """
 
