@@ -17,7 +17,8 @@ ignoreme.*
 
 ignoreme/
 
-ph8_logs/
+tmp_wrk/
+tmp_wrk
 
 ############################################################# node
 # Logs
