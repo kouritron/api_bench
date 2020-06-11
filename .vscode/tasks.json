@@ -1,0 +1,50 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        // ---------------------------------------- gdz
+        {
+            "label": "gdz_pyclean",
+            "type": "process",
+            "command": "gdz_pyclean.py",
+            "args": [
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        // ---------------------------------------- ldz
+        {
+            "label": "ldz_yapf_cf",
+            "type": "process",
+            "command": "python3",
+            "args": [
+                "./ldz/ldz_yapf_cf.py",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "ldz_run_cf_p3",
+            "type": "process",
+            "command": "python3",
+            "args": [
+                "./ldz/ldz_run_cf_p3.py",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+    ]
+}
