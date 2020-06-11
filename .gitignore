@@ -20,6 +20,10 @@ ignoreme/
 tmp_wrk/
 tmp_wrk
 
+
+go_examples/go_examples
+
+
 ############################################################# node
 # Logs
 logs
