@@ -1,0 +1,62 @@
+Here are some sample benchmark results for tests done against the trivial web servers in python3, golang, nodejs, ...
+
+Specs:
+- Ryzen 2700X stock.
+- Ubuntu 18.04, kernel 5.3
+- Node v12
+- golang 1.12
+- Not 100% sure about memory Latency, but I am guessing its no worse than around 70-80ns as these are gaming UDIMMs.
+not the best kit ever, but obviously far better than server RDIMM or LRDIMMs. Still I dont think makes that much of a 
+diff, as these programs are so small they all fit in cache.
+
+
+# ======================================================================================================================
+# ======================================================================================================================
+- option A:
+trivial web server in nodejs using the http package. (its async, but no real multi-core benefit)
+
+- option B:
+trivial web server in golang using the http and gorilla/mux packages. (16 threads, all nearly max out in this test)
+
+- option C:
+trivial web server in python3 using the cheroot and bottle:
+
+# ======================================================================================================================
+# ========================================================================================== results for A. ~ 22k req/s:
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    18.05ms    2.51ms 254.95ms   95.43%
+    Req/Sec     1.38k   296.17    11.45k    97.64%
+  221127 requests in 10.07s, 37.12MB read
+Requests/sec:  21952.51
+Transfer/sec:      3.68MB
+
+
+# ======================================================================================================================
+# ========================================================================================= results for B. ~ 265k req/s:
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.81ms    2.07ms 209.13ms   89.34%
+    Req/Sec    16.84k     2.64k   46.43k    72.91%
+  2671422 requests in 10.08s, 323.55MB read
+Requests/sec: 265031.57
+Transfer/sec:     32.10MB
+
+# ======================================================================================================================
+# ========================================================================================== results for C. ~ 180 req/s:
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   145.56ms  208.30ms   1.90s    93.80%
+    Req/Sec    22.77     15.64    90.00     70.87%
+  1800 requests in 10.08s, 264.08KB read
+  Socket errors: connect 0, read 404, write 0, timeout 26
+Requests/sec:    178.52
+Transfer/sec:     26.19KB
+
+# ======================================================================================================================
+# ======================================================================================================================
+
+
