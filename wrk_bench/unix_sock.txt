@@ -1,0 +1,12 @@
+
+# TODO, repeat some of the benchmarks using unix domain sockets to see impact on performance vs TCP.
+
+# run inside docker
+
+python3 -c "import socket as s; sock = s.socket(s.AF_UNIX); sock.bind('/tmp/test.sock')"
+
+# then run
+
+gunicorn -b /tmp/test.sock -w 16 wse_gunc:ws
+
+
