@@ -1,0 +1,18 @@
+
+
+mkdir -p /tmp/tmp_wrk
+
+cd /tmp/tmp_wrk
+
+git clone https://github.com/wg/wrk .
+
+time make -j16
+
+# ==================== drop the build files.
+mv ./wrk ../wrk_executable
+cd ..
+rm -rf tmp_wrk
+
+mkdir -p tmp_wrk
+cd tmp_wrk
+mv ../wrk_executable ./wrk
