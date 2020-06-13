@@ -6,18 +6,18 @@
 
 import bottle
 
-def do_compute():
+# def do_compute():
 
-    i = 0
-    for _ in range(90000):
-        i += 1
+#     i = 0
+#     for _ in range(90000):
+#         i += 1
 
 
 @bottle.get('/')
 def home_page():
 
     # print("home page called.")
-    do_compute()
+    # do_compute()
     return 'Hello World'
 
 if '__main__' == __name__:

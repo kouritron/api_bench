@@ -1,12 +1,21 @@
 
 # TODO, repeat some of the benchmarks using unix domain sockets to see impact on performance vs TCP.
 
-# run inside docker
+# You can run the wse_uds_waitress.py inside a docker container, to get it to print something like: 
 
-python3 -c "import socket as s; sock = s.socket(s.AF_UNIX); sock.bind('/tmp/test.sock')"
-
-# then run
-
-gunicorn -b /tmp/test.sock -w 16 wse_gunc:ws
+# Serving on http://unix:/tmp/wse_waitress_test.sock
 
 
+# then you could benchmark it in theory but it looks like wrk doesnt support unix sockets, maybe ab or locust
+# although locust is written in python, i am not sure how fast it would be, but it heard its hackable and distributed
+# some ppl recommned it.
+
+
+
+# curl works for 1 request:
+
+# curl -X __method__ --unix-socket __sock_addr__ __resource_addr__
+# example for __resource_addr__:  http:/images/json
+
+# for the wse_uds_waitress example it would be:
+curl -X GET --unix-socket /tmp/wse_waitress_test.sock http:

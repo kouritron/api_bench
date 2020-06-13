@@ -26,7 +26,7 @@ diff, as these programs are so small they all fit in cache.
 # ======================================================================================================================
 # ======================================================================================================================
 # ======================================================================================================================
-# =========================================================== wrk config: ./wrk -t 16 -c 400 -d 10 http://localhost:7081
+# =========================================================== config: 16 thread, 400 conns, trivial servers.
 
 
 # ======================================================================================================================
@@ -58,10 +58,147 @@ Running 10s test @ http://localhost:7081
 Requests/sec: 265031.57
 Transfer/sec:     32.10MB
 
+
+
 # ======================================================================================================================
-# =========================================================================================== 180 req/s ~ python3 based:
+# ====================================================================================================== python3/cheroot
+# python3, cheroot, bottle, nothing being logged per request:
+# no do_compute()
+
+
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    27.98ms  134.61ms   1.87s    97.37%
+    Req/Sec   102.28    104.03     0.91k    87.56%
+  11387 requests in 10.08s, 1.63MB read
+  Socket errors: connect 0, read 2345, write 0, timeout 20
+Requests/sec:   1129.50
+Transfer/sec:    165.45KB
+
+
+# ======================================================================================================================
+# ======================================================================================================= python3/gevent
+# -------------------- wse_gevent.py
+# python3, bottle, monkey patch gevent, one line logged per request):
+# no do_compute()
+
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   201.57ms  265.40ms   1.50s    80.33%
+    Req/Sec   501.59    513.69     4.10k    84.81%
+  58317 requests in 10.06s, 7.07MB read
+  Socket errors: connect 0, read 0, write 0, timeout 67
+Requests/sec:   5794.45
+Transfer/sec:    718.88KB
+
+
+# ======================================================================================================================
+# ======================================================================================================= python3/gevent
+# -------------------- wse_gevent.py
+# python3, bottle, monkey patch gevent, logs redirected to dev/null):
+# no do_compute()
+
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   231.05ms  311.47ms   1.79s    80.68%
+    Req/Sec   617.06    734.90     4.48k    86.62%
+  63450 requests in 10.10s, 7.69MB read
+  Socket errors: connect 0, read 0, write 0, timeout 50
+Requests/sec:   6282.44
+Transfer/sec:    779.35KB
+
+
+
+# ======================================================================================================================
+# ===================================================================================================== python3/gunicorn 
+# -------------------- wse_gunc.py
+# python3, no longs, no do_compute()
+
+# -------------------------- 16 workers
+
+wrk -t 16 -c 400 -d 10 http://localhost:7081
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     6.74ms   34.20ms 834.62ms   97.84%
+    Req/Sec     2.98k     1.18k    6.39k    69.45%
+  474222 requests in 10.06s, 72.36MB read
+Requests/sec:  47159.07
+Transfer/sec:      7.20MB
+
+# -------------------------- 8 workers
+
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    27.03ms  139.50ms   1.69s    96.78%
+    Req/Sec     1.38k     1.12k    5.57k    77.18%
+  218855 requests in 10.10s, 33.40MB read
+Requests/sec:  21668.81
+Transfer/sec:      3.31MB
+
+# -------------------------- 4 workers 
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    27.04ms  114.04ms   1.69s    95.96%
+    Req/Sec     1.07k     0.90k    3.88k    65.12%
+  155164 requests in 10.10s, 23.68MB read
+  Socket errors: connect 0, read 0, write 0, timeout 25
+Requests/sec:  15366.83
+Transfer/sec:      2.34MB
+
+# -------------------------- 2 workers (most likely EC2 for web server)
+
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    23.03ms   79.39ms   1.68s    97.43%
+    Req/Sec   808.32    647.15     2.12k    51.12%
+  78974 requests in 10.08s, 12.05MB read
+  Socket errors: connect 0, read 0, write 0, timeout 3
+Requests/sec:   7837.62
+Transfer/sec:      1.20MB
+
+# -------------------------- 1 worker, why bother with gunicorn ??
+
+Running 10s test @ http://localhost:7081
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    45.87ms  100.86ms   1.66s    94.15%
+    Req/Sec   389.50    365.93     1.14k    68.18%
+  44373 requests in 10.07s, 6.77MB read
+  Socket errors: connect 0, read 0, write 0, timeout 4
+Requests/sec:   4406.60
+Transfer/sec:    688.57KB
+
+
+
+
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ======================================================================================================================
+# ==================================================================== 180 req/s ~ python3 with the do_compute function:
 # -------------------- wse_cheroot.py
 # python3, cheroot, bottle, nothing being logged per request.:
+# w/ do_compute, count from 0 to 90k
+
 
 Running 10s test @ http://localhost:7081
   16 threads and 400 connections
@@ -78,6 +215,7 @@ Transfer/sec:     26.19KB
 # =========================================================================================== 300 req/s ~ python3 based:
 # -------------------- wse_gevent.py
 # python3, bottle, monkey patch gevent, one line logged per request):
+# w/ do_compute, count from 0 to 90k
 
 Running 10s test @ http://localhost:7081
   16 threads and 400 connections
@@ -94,6 +232,7 @@ Transfer/sec:     37.54KB
 # ======================================================================================================================
 # -------------------- wse_gunc.py
 # python3, gunicorn, no bottle. just wsgi app. 4 workers, ran inside a docker container. it does spike a few CPUs
+# w/ do_compute, count from 0 to 90k
 # gunicorn -b 0.0.0.0:7081 -w 4 wse_gunc:ws
 
 Running 10s test @ http://localhost:7081
@@ -111,7 +250,7 @@ Transfer/sec:    155.67KB
 # -------------------- wse_gunc.py
 # python3, gunicorn, no bottle. just wsgi app. 4 workers, ran inside a docker container.
 # it spikes all CPUs, to absolute 100%. to the point, mouse movement gets laggy. still no more than 2500 req/s
-
+# w/ do_compute, count from 0 to 90k
 # gunicorn -b 0.0.0.0:7081 -w 16 wse_gunc:ws
 
 Running 10s test @ http://localhost:7081
@@ -141,24 +280,5 @@ Transfer/sec:    386.19KB
 # ======================================================================================================================
 # ======================================================================================================================
 # ======================================================================================================================
-# ============================================================ wrk config: ./wrk -t 16 -c 40 -d 10 http://localhost:7081
-
-
-# ======================================================================================================================
-# ============================================================================================================== python3
-
-# gunicorn w/ 16 workers
-
-Running 10s test @ http://localhost:7081
-  16 threads and 40 connections
-  Thread Stats   Avg      Stdev     Max   +/- Stdev
-    Latency    12.21ms    1.85ms  39.88ms   77.69%
-    Req/Sec   163.45     10.48   242.00     74.43%
-  26148 requests in 10.07s, 3.99MB read
-Requests/sec:   2596.87
-Transfer/sec:    405.76KB
-
-***** Latency is less disasterous now, but req/s is still pretty poor.
-that may not matter if its not the bottleneck.
 
 
