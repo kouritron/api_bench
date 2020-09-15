@@ -17,13 +17,11 @@
             },
             "problemMatcher": []
         },
-        // ---------------------------------------- ldz
         {
-            "label": "ldz_yapf_cf",
+            "label": "gdz_spell_check",
             "type": "process",
-            "command": "python3",
+            "command": "gdz_spell_check.py",
             "args": [
-                "./ldz/ldz_yapf_cf.py",
                 "${file}"
             ],
             "presentation": {
@@ -33,16 +31,77 @@
             "problemMatcher": []
         },
         {
-            "label": "ldz_run_cf_p3",
+            "label": "gdz_search_repo",
             "type": "process",
-            "command": "python3",
+            "command": "gdz_search_repo.py",
             "args": [
-                "./ldz/ldz_run_cf_p3.py",
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "gdz_auto_bak",
+            "type": "process",
+            "command": "gdz_auto_bak.py",
+            "args": [
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "gdz_ruhp",
+            "type": "process",
+            "command": "gdz_ruhp.py",
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "gdz_run_p3_script",
+            "type": "process",
+            "command": "gdz_run_p3_script.py",
+            "args": [
                 "${file}"
             ],
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "gdz_sep_stdout_stderr_p3_script",
+            "type": "process",
+            "command": "gdz_sep_stdout_stderr_p3_script.py",
+            "args": [
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "dedicated"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "gdz_yapf_cf",
+            "type": "process",
+            "command": "gdz_yapf_curr_file.py",
+            "args": [
+                "${file}"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "panel": "shared"
             },
             "problemMatcher": []
         },
