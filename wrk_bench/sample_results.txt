@@ -30,6 +30,8 @@ diff, as these programs are so small they all fit in cache.
 
 
 # ======================================================================================================================
+# =============================================================================================================== nodejs
+# ======================================================================================================================
 # ============================================================================================= 22k req/s - nodejs based
 # trivial web server in nodejs using the http package.
 # its async, but no real multi-core benefit.
@@ -44,6 +46,8 @@ Requests/sec:  21952.51
 Transfer/sec:      3.68MB
 
 
+# ======================================================================================================================
+# =============================================================================================================== golang
 # ======================================================================================================================
 # =========================================================================================== 265k req/s - golang based:
 # trivial web server in golang using the http and gorilla/mux packages. (16 threads, all nearly max out in this test)
@@ -61,6 +65,28 @@ Transfer/sec:     32.10MB
 
 
 # ======================================================================================================================
+# =============================================================================================================== python
+# ======================================================================================================================
+# really only cheroot, tornado are worth considering IMO, monkey_patch seems really crazy, hacks around
+# "thread local" global variables to request, response (inside user space implemented lightweight threads no less)
+# look even more ugly to me.
+#
+# - cheroot is production ready enof to be innternet facing w/- anything else in front. at least supposed to be.
+# - tornado is the most popular of them, developed at facebook. Its not WSGI tho. (which cant be said to be a liability)
+# Tornado is absolutely great for long polling. If you need to emulate a push service at the application layer,
+# for sure, this is going to be hard to beat. (TODO compare against even golang in this case.)
+#
+# - Long polling reminder: it was the one where we did a simple request/response, but the server response
+# latency wasnt a few milliseconds, it was like 5 minutes. Server responded if it had a notification in 5 those minutes
+# or both sides moved on. and client made sure there was a new request every 5 min.
+#
+
+
+
+
+
+
+
 # ====================================================================================================== python3/cheroot
 # python3, cheroot, bottle, nothing being logged per request:
 # no do_compute()
@@ -75,6 +101,11 @@ Running 10s test @ http://localhost:7081
   Socket errors: connect 0, read 2345, write 0, timeout 20
 Requests/sec:   1129.50
 Transfer/sec:    165.45KB
+
+
+# ======================================================================================================================
+# ============================================================================================================= 
+
 
 
 # ======================================================================================================================
@@ -113,7 +144,7 @@ Transfer/sec:    779.35KB
 
 
 # ======================================================================================================================
-# ===================================================================================================== python3/gunicorn 
+# ===================================================================================================== python3/gunicorn
 # -------------------- wse_gunc.py
 # python3, no longs, no do_compute()
 
