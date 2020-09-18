@@ -18,7 +18,7 @@ import bottle
 
 
 # def do_compute():
-    
+
 #     i = 0
 #     for _ in range(90000):
 #         i += 1
@@ -34,7 +34,7 @@ def home_page():
 
 if '__main__' == __name__:
 
-    ws_port = 7081
+    ws_port = 8082
     debug = False
     host = '0.0.0.0'
     bottle.run(app=bottle.app(), host=host, port=ws_port, debug=debug, server="gevent")

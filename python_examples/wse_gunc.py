@@ -2,7 +2,7 @@
 
 # Run it like this
 # pip3 install gunicorn
-# gunicorn -b 0.0.0.0:7081 -w 4 wse_gunc:ws
+# gunicorn -b 0.0.0.0:8082 -w 4 wse_gunc:ws
 
 # this example is just python gunicorn, you probably need other stuff as well.
 

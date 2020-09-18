@@ -114,6 +114,7 @@ Transfer/sec:    636.21KB
 # python3, cheroot, bottle, nothing being logged per request:
 # no do_compute()
 
+# ******************** w/ bottle in the middle
 
 Running 10s test @ http://localhost:7081
   16 threads and 400 connections
@@ -125,6 +126,29 @@ Running 10s test @ http://localhost:7081
 Requests/sec:   1129.50
 Transfer/sec:    165.45KB
 
+# ******************** dropping bottle would improve req/s perf but hurt latency ??:
+
+Running 10s test @ http://localhost:8082/
+  16 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    69.96ms  222.79ms   1.87s    91.81%
+    Req/Sec   253.98    187.71     1.07k    69.11%
+  26420 requests in 10.06s, 3.82MB read
+  Socket errors: connect 0, read 0, write 0, timeout 109
+Requests/sec:   2626.58
+Transfer/sec:    388.63KB
+
+# ******************** just wsgi, 40 conn, 8 threads:
+Running 10s test @ http://localhost:8082/
+  8 threads and 40 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency   147.16ms  281.74ms   1.85s    84.51%
+    Req/Sec   376.56    154.87   810.00     65.73%
+  29280 requests in 10.01s, 3.96MB read
+  Socket errors: connect 0, read 429, write 0, timeout 3
+Requests/sec:   2926.02
+Transfer/sec:    405.09KB
+
 
 
 
@@ -135,9 +159,22 @@ Transfer/sec:    165.45KB
 
 # ======================================================================================================================
 # =============================================================================================================== bjoern
-# TODO test bjoern (its supposed be a fast one written in C) fast it might be, but I dont know what shape it is in.
-# from bjoern import run
-# run(wsgi_app, "0.0.0.0", 8082)
+# Its written in C and is crazy fast, but I dont know what shape it is in othewrise, reliability, security, ...
+# Internet facing HTTP server written in C, sounds like a very dangerous idea. Buffer overflows were born for this.
+
+# No diff between 4, 8, 16 threads
+# 
+
+Running 10s test @ http://localhost:8082/
+  8 threads and 400 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     5.56ms    8.91ms 276.51ms   98.95%
+    Req/Sec    10.30k   844.85    15.43k    95.75%
+  819573 requests in 10.03s, 78.94MB read
+Requests/sec:  81695.91
+Transfer/sec:      7.87MB
+
+
 
 
 
