@@ -1,0 +1,96 @@
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------- build from source
+# build from source docs are great, short version here: (google for more details)
+
+
+# ------ get a fresh ubuntu 20 container
+apt install python3-pip build-essential curl git libreadline5 libreadline-dev
+
+mkdir -p /tmp/pg12
+cd /tmp/pg12
+curl -O https://ftp.postgresql.org/pub/source/v12.4/postgresql-12.4.tar.gz
+echo "9749b891b9d8f984312fe510a7a3613035134cee1e634793dac5568d1e1a5852  postgresql-12.4.tar.gz" | sha256sum -c
+
+tar xzf postgresql-12.4.tar.gz
+cd postgresql-12.4
+
+./configure
+make -j16
+make install
+adduser postgres
+
+# choose data dir:
+# export DEMOPG_DATADIR="/usr/local/pgsql/data"
+
+export DEMOPG_DATADIR="/mem_vol/pg12/data"
+echo $DEMOPG_DATADIR
+
+mkdir -p $DEMOPG_DATADIR
+chown postgres $DEMOPG_DATADIR
+
+su - postgres
+
+/usr/local/pgsql/bin/initdb -D $DEMOPG_DATADIR
+
+# /usr/local/pgsql/bin/postgres -D $DEMOPG_DATADIR >logfile 2>&1 &
+# /usr/local/pgsql/bin/pg_ctl -D $DEMOPG_DATADIR -l logfile start
+
+/usr/local/pgsql/bin/pg_ctl -D $DEMOPG_DATADIR start
+
+/usr/local/pgsql/bin/createdb test
+/usr/local/pgsql/bin/psql test
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------------------------------------------
+# --------------------------------------------------------------------------------------------------------- Get from Apt
+# ubuntu has a decent pg pkg already
+
+
+sudo docker run --rm -it --network host --name pg12 ubuntu:20.04 bash
+
+# postgresql-12
+# postgresql-plpython3-12
+# postgresql-contrib (additional extensions, comes with RDS by default) I couldnt find -12 for it.
+
+$ apt update postgresql-12 postgresql-plpython3-12
+
+# running that prints (which i havent tested. for starting db look at option1 and 2 below):
+# 
+# Success. You can now start the database server using:
+#    pg_ctlcluster 12 main start
+# Ver Cluster Port Status Owner    Data directory              Log file
+# 12  main    5432 down   postgres /var/lib/postgresql/12/main /var/log/postgresql/postgresql-12-main.log
+
+# ----------------------------------------------------------------------- start option1
+
+# start server using (as postgres):
+# /etc/init.d/postgresql start
+# /etc/init.d/postgresql status
+
+# change port here: /etc/postgresql/12/main/postgresql.conf
+# and reload if need be.
+
+# historical note on "/etc/init.d/..."
+# this location was/is the place where "service" command and old initV system look to,
+# for process management scripts. service is still around, but has less features than
+# systemctl, because it invokes systemctl sometimes and does other things on other systems
+# systemctl is the way to go, going forward.
+# I think pg_ctl is the better way inside a container.
+
+
+# ----------------------------------------------------------------------- start option2
+# use pg_ctl under here:
+# /usr/lib/postgresql/12/bin/pg_ctl
+
+# pg_ctl and 'postgres' docs here:
+# https://www.postgresql.org/docs/13/server-start.html
+# https://www.postgresql.org/docs/13/app-postgres.html
+
