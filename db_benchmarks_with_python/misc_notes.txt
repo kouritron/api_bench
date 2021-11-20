@@ -1,0 +1,17 @@
+
+# ==================== Get another shell ie in a temp pg container:
+
+$ docker exec -it --user root _container_name_(ie mycon)_ bash
+
+
+# ==================== clean up
+$ docker system prune -af
+$ docker image prune -af
+
+
+
+# ==================== tmpfs vol
+$ docker run --rm -it --tmpfs /app nginx:latest
+
+
+
