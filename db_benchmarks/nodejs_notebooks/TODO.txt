@@ -1,0 +1,6 @@
+
+run the pg_parallel benchmark from a nodejs client, see if we can push it higher.
+
+ 
+
+
