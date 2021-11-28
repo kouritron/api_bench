@@ -1,0 +1,23 @@
+{
+  "name": "api_bench",
+  "version": "1.0.0",
+  "description": "Various example API stack/architecture, and corresponding benchmarks, for later reference.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kouritron/api_bench.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kouritron/api_bench/issues"
+  },
+  "homepage": "https://github.com/kouritron/api_bench#readme",
+  "dependencies": {
+    "pg": "^8.7.1",
+    "postgres": "^1.0.2"
+  }
+}
